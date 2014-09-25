@@ -1,3 +1,18 @@
+angular.module('app').controller('HomeCtrl', HomeCtrl);
+
+function HomeCtrl($scope, $http, $sce) {
+	var keyword = "cats";
+	$scope.youtubeUrl = "";
+
+	$http.get('http://gdata.youtube.com/feeds/api/videos?q='+keyword+'&format=5&max-results=1&v=2&alt=jsonc')
+		.success(function(res) {
+			$scope.youtubeUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/'+res.data.items[0].id);
+		})
+		.error(function(err) {
+			console.log(err);
+		});
+}
+
 angular.module('app').controller('ListCtrl', ListCtrl);
 
 function ListCtrl($rootScope, $scope) {
@@ -23,13 +38,13 @@ function AuthCtrl($rootScope, $scope, $state, $http) {
 				$state.go($rootScope.authRedirect, $rootScope.authRedirectParams);
 			})
 			.error(function(err) {
-				alert(err);
+				console.log(err);
 			});
 	}
 	$scope.signup = function () {
 		$http.post('/auth/signup', $scope.user)
-			.success(function(user) {
-				$rootScope.currentUser = user;
+			.success(function(data) {
+				console.log(data);
 				$state.go($rootScope.authRedirect, $rootScope.authRedirectParams);
 			})
 			.error(function(err) {

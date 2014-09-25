@@ -31,7 +31,8 @@ angular.module('app', [
 
 		.state('home', {
 			url: '/',
-			templateUrl: 'views/home.html'
+			templateUrl: 'views/home.html',
+			controller: 'HomeCtrl'
 		})
 
 		.state('community', {
