@@ -33,6 +33,7 @@ function AuthCtrl($rootScope, $scope, $state, $http) {
 				$scope.loginError = err.message;
 			});
 	}
+
 	$scope.signup = function () {
 		$http.post('/auth/signup', $scope.user)
 			.success(function(data) {

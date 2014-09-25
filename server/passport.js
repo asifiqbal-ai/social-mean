@@ -1,5 +1,6 @@
 // load strategies
 var LocalStrategy = require('passport-local').Strategy;
+var FacebookStrategy  = require('passport-facebook').Strategy;
 
 // load user model
 var User = require('./models/User');
@@ -33,5 +34,32 @@ module.exports = function(passport) {
 	      }
 	    });
 	  });
+	}));
+
+	// Facebook login
+	passport.use(new FacebookStrategy({
+		clientID: config.FB_ID,
+		clientSecret: config.FB_SECRET,
+		callbackURL: config.FB_CALLBACK 
+	},
+	function(token, refreshToken, profile, done) {
+		User.findOne({ facebook: profile.id }, function(err, existingUser) {
+			if(existingUser) return done(null, existingUser);
+			User.findOne({ email: profile._json.email }, function(err, existingEmailUser) {
+				if (existingEmailUser) {
+					return done(null, false, { message: 'There is already an account using this email address.' });
+				}
+				else {
+					var user = new User();
+					user.name = profile.displayName;
+					user.email = profile._json.email;
+					user.facebook = profile.id;
+					user.picture = 'https://graph.facebook.com/' + profile.id + '/picture?type=large';
+					user.save(function(err) {
+						return done(err, user);
+					});
+				}
+			});
+		});
 	}));
 }

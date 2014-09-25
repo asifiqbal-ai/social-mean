@@ -42,4 +42,14 @@ module.exports = function(app, passport) {
 		  var md5 = crypto.createHash('md5').update(email).digest('hex');
 		  return 'https://gravatar.com/avatar/' + md5 + '?s=' + size + '&d=mm';
 	}
+
+	// facebook login 
+	app.get('/auth/facebook', passport.authenticate('facebook'));
+	app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/' }), function(req, res) {
+	  res.redirect('/#!/');
+	});
+
 };
+
+
+
