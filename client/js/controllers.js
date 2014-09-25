@@ -1,16 +1,7 @@
 angular.module('app').controller('HomeCtrl', HomeCtrl);
 
-function HomeCtrl($scope, $http, $sce) {
-	var keyword = "cats";
-	$scope.youtubeUrl = "";
-
-	$http.get('http://gdata.youtube.com/feeds/api/videos?q='+keyword+'&format=5&max-results=1&v=2&alt=jsonc')
-		.success(function(res) {
-			$scope.youtubeUrl = $sce.trustAsResourceUrl('http://www.youtube.com/embed/'+res.data.items[0].id);
-		})
-		.error(function(err) {
-			console.log(err);
-		});
+function HomeCtrl($rootScope, $scope) {
+	$scope.hello = "Hello world";
 }
 
 angular.module('app').controller('ListCtrl', ListCtrl);
@@ -21,9 +12,10 @@ function ListCtrl($rootScope, $scope) {
 
 angular.module('app').controller('NavCtrl', NavCtrl);
 
-function NavCtrl($rootScope, $scope) {
+function NavCtrl($rootScope, $scope, $state) {
 	$scope.logout = function () {
 		$rootScope.currentUser = null;
+		$state.go('home');
 	}
 }
 
@@ -32,23 +24,23 @@ angular.module('app').controller('AuthCtrl', AuthCtrl);
 function AuthCtrl($rootScope, $scope, $state, $http) {
 	$scope.login = function () {
 		$http.post('/auth/login', $scope.credentials)
-			.success(function(user) {
-				console.log(user);
-				$rootScope.currentUser = user;
+			.success(function(data) {
+				console.log(data);
+				$rootScope.currentUser = data.user;
 				$state.go($rootScope.authRedirect, $rootScope.authRedirectParams);
 			})
 			.error(function(err) {
-				console.log(err);
+				$scope.loginError = err.message;
 			});
 	}
 	$scope.signup = function () {
 		$http.post('/auth/signup', $scope.user)
 			.success(function(data) {
-				console.log(data);
+				$rootScope.currentUser = data.user;
 				$state.go($rootScope.authRedirect, $rootScope.authRedirectParams);
 			})
 			.error(function(err) {
-				console.log('Error: '+ err);
+				$scope.signupError = err.message;
 			});
 	}
 }

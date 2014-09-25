@@ -56,6 +56,17 @@ angular.module('app', [
 			url: '/login',
 			templateUrl: 'views/login.html',
 			controller: 'AuthCtrl'
+		})
+
+		// auth states
+		.state('profile', {
+			url: '/profile',
+			templateUrl: 'views/profile.html',
+			onEnter: function ($state, $rootScope) {
+				if($rootScope.currentUser === null) {
+					$state.go('home');
+				}
+			}
 		});
 
 		// enable hashbang mode

@@ -6,6 +6,13 @@
 	border-radius: 2px;
 }
 
+.profile-pic {
+    float: left;
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+}
+
 .form-signin
 {
     max-width: 330px;

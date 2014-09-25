@@ -26,11 +26,11 @@
         <li ui-sref-active="active"><a ui-sref="home">Home</a></li>
         <li ui-sref-active="active"><a ui-sref="community">Community</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right" ng-show="currentUser">
-        <li ui-sref-active="active"><a href="#">{{currentUser.email}}</a></li>
+      <ul class="nav navbar-nav navbar-right" ng-if="currentUser">
+      <a ui-sref="profile"><img class="img-circle profile-pic" src="{{currentUser.picture}}"></a>
         <li><a href ng-click="logout()">Log out</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right" ng-hide="currentUser">
+      <ul class="nav navbar-nav navbar-right" ng-if="!currentUser">
         <li ui-sref-active="active"><a ui-sref="login">Login</a></li>
         <li ui-sref-active="active"><a ui-sref="signup">Signup</a></li>
       </ul>

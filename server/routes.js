@@ -1,4 +1,5 @@
 var User = require('./models/User');
+var crypto = require('crypto');
 
 module.exports = function(app, passport) {
 
@@ -9,6 +10,7 @@ module.exports = function(app, passport) {
 
 		var user = new User({
 			name: req.body.name,
+			picture: gravatar(req.body.email),
 			email: req.body.email,
 			password: req.body.password
 		});
@@ -34,4 +36,10 @@ module.exports = function(app, passport) {
 
 		})(req, res, next)
 	});
+
+	function gravatar(email) {
+		  var size = 200;
+		  var md5 = crypto.createHash('md5').update(email).digest('hex');
+		  return 'https://gravatar.com/avatar/' + md5 + '?s=' + size + '&d=mm';
+	}
 };
